@@ -10,7 +10,9 @@ async function GET<T = unknown>(url: string): AsyncReturnType<T> {
     const response = await fetch(baseApiURL + url, {
       method: "GET",
       headers: {
-        Authorization: `bearer `,
+        ...(localStorage.getItem("tokenZoo") && {
+          Authorization: `bearer ${localStorage.getItem("tokenZoo")}`,
+        }),
         Accept: "*/*",
       },
     });
@@ -32,7 +34,9 @@ async function POST<T = unknown, P = object | string | number>(
       headers: {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer `,
+        ...(localStorage.getItem("tokenZoo") && {
+          Authorization: `bearer ${localStorage.getItem("tokenZoo")}`,
+        }),
       },
 
       body: JSON.stringify(body),
@@ -54,7 +58,9 @@ async function PUT<T = unknown, P = object | string | number>(
     const response = await fetch(url, {
       method: "PUT",
       headers: {
-        Authorization: `bearer `,
+        ...(localStorage.getItem("tokenZoo") && {
+          Authorization: `bearer ${localStorage.getItem("tokenZoo")}`,
+        }),
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
@@ -72,7 +78,9 @@ async function DELETE<T = unknown>(url: string): AsyncReturnType<T> {
     const response = await fetch(url, {
       method: "DELETE",
       headers: {
-        Authorization: `bearer `,
+        ...(localStorage.getItem("tokenZoo") && {
+          Authorization: `bearer ${localStorage.getItem("tokenZoo")}`,
+        }),
         "Content-type": "application/json",
       },
     });

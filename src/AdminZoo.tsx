@@ -26,8 +26,7 @@ export const AdminZoo = () => {
           >
             {!isSearching && (
               <Routes>
-                <Route path="/login" element={<AuthLogin />} />
-                <Route path="/" element={<Zone />} />
+                <Route path="/zona" element={<Zone />} />
                 <Route path="/animals/:id" element={<Animals />} />
                 <Route path="/detalle-animal/:id" element={<DetailAnimal />} />
                 <Route path="/login" element={<AuthLogin />} />

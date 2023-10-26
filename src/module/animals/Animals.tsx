@@ -18,7 +18,7 @@ export const Animals = () => {
   const navigate = useNavigate();
 
   const toBack = () => {
-    navigate(`/`);
+    navigate(`/zona`);
   };
 
   return (

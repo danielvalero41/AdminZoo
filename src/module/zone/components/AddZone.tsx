@@ -2,6 +2,8 @@ import { AddCircle } from "@mui/icons-material";
 import { Box, Button, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { ZooContext } from "../../../context/ZooContext";
+import { createZone } from "../../../services/zoneServices";
+import { ModalError } from "../../../components/Modal/ModalError/ModalError";
 
 // type Props = {
 //     onNewZone:(name:string,id:number)=>void
@@ -9,17 +11,31 @@ import { ZooContext } from "../../../context/ZooContext";
 
 export const AddZone = () => {
   const { generateId, onAddZone } = useContext(ZooContext);
-
   const [nameZone, setNameZone] = useState("");
+  const [error, setError] = useState(false);
+  const msjError = "Esta zona ya existe";
 
   const onGetValueInput = (value: string) => {
     setNameZone(value);
   };
 
-  const Add = () => {
+  const Add = async () => {
     if (nameZone.trim().length <= 1) return;
-    onAddZone(nameZone, generateId);
-    setNameZone("");
+
+    const { data: data, error: error } = await createZone(nameZone);
+
+    console.log(data);
+
+    if (data) {
+      onAddZone(nameZone, generateId);
+      setNameZone("");
+      return;
+    }
+
+    if (error) {
+      setError(true);
+      return;
+    }
   };
 
   return (
@@ -49,6 +65,9 @@ export const AddZone = () => {
           Agregar zona
         </Button>
       </Box>
+
+      {/* MODAL */}
+      <ModalError open={error} msjError={msjError} setClose={setError} />
     </>
   );
 };

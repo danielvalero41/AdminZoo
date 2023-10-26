@@ -17,9 +17,9 @@ export const zooTheme = createTheme({
           sx: {
             "&:not(.Mui-focused):not(.MuiFormLabel-filled)": {
               fontSize: "14px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              left: "14px",
+              // top: "30%",
+              // transform: "translateY(-50%)",
+              // left: "14px",
             },
             transition: ".2s",
           },

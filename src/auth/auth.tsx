@@ -1,8 +1,10 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { loginUser } from "../services/userServices";
+import { useNavigate } from "react-router";
 
 const schema = z.object({
   email: z
@@ -10,18 +12,17 @@ const schema = z.object({
     .min(1, { message: "El correo es requerido" })
     .email({ message: "El correo no es valido" })
     .trim(),
-  password: z
-    .string()
-    .min(8, { message: "La contraseña debe tener minimo 8 caracteres" })
-    .regex(
-      new RegExp(
-        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-      ),
-      {
-        message:
-          "La contraseña debe tener al menos una mayuscula, una minuscula, un numero y un caracter especial",
-      }
-    ),
+  password: z.string().min(1, { message: "La contraseña es requerida" }),
+  // .min(8, { message: "La contraseña debe tener minimo 8 caracteres" })
+  // .regex(
+  //   new RegExp(
+  //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+  //   ),
+  //   {
+  //     message:
+  //       "La contraseña debe tener al menos una mayuscula, una minuscula, un numero y un caracter especial",
+  //   }
+  // ),
 });
 
 type FormInput = {
@@ -29,18 +30,26 @@ type FormInput = {
   password: string;
 };
 
-export const AuthLogin = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+type dataLogin = {
+  token: string;
+};
 
+export const AuthLogin = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormInput>({ mode: "all", resolver: zodResolver(schema) });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const navigate = useNavigate();
+
+  const onSubmit = async (form: any) => {
+    const data = await loginUser(form.email, form.password);
+
+    if (data) {
+      localStorage.setItem("tokenZoo", (data?.data as dataLogin).token);
+      navigate("/zona");
+    }
   };
 
   return (
@@ -59,6 +68,7 @@ export const AuthLogin = () => {
       </Typography>
 
       <form
+        autoComplete="off"
         onSubmit={handleSubmit(onSubmit)}
         style={{
           display: "flex",
@@ -73,9 +83,6 @@ export const AuthLogin = () => {
           fullWidth
           type="text"
           label="Email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.currentTarget.value)}
           error={!!errors.email?.message}
           helperText={errors.email?.message}
         />
@@ -87,8 +94,6 @@ export const AuthLogin = () => {
           label="Contraseña"
           type="password"
           id="password"
-          value={password}
-          onChange={(e) => setPassword(e.currentTarget.value)}
           error={!!errors.password?.message}
           helperText={errors.password?.message}
         />

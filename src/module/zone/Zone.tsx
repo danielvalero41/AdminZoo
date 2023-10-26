@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ZooContext } from "../../context/ZooContext";
 import { AddZone } from "./components/AddZone";
 import { ListZone } from "./components/ListZone";
@@ -8,9 +8,18 @@ import { getZones } from "../../services/zoneServices";
 export const Zone = () => {
   const { zoo, onSelectZone } = useContext(ZooContext);
 
+  /**
+   * Hay que conectar la lista de zona con el context
+   */
+
+  // const [zoo, setZoo] = useState([]);
+
   const loadZone = async () => {
     const data = await getZones();
     console.log(data);
+    // if (data) {
+    //   setZoo(data.data as any);
+    // }
   };
 
   useEffect(() => {
@@ -25,18 +34,17 @@ export const Zone = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-
           marginTop: "30px",
           gap: "30px",
           flexWrap: "wrap",
         }}
       >
-        {zoo.map((zoo) => (
+        {zoo.map((zoo: any) => (
           <ListZone
             key={zoo.id}
             count={zoo.animals.length}
             data={zoo}
-            viewZone={onSelectZone}
+            // viewZone={onSelectZone}
           ></ListZone>
         ))}
       </Box>

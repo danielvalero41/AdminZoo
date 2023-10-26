@@ -1,16 +1,15 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
 import { DataZoo } from "../../../model/DataZoo";
 
 type Props = {
   data: DataZoo;
   count: number;
-  viewZone: (value: DataZoo) => void;
+  viewZone?: (value: DataZoo) => void;
 };
 
 export const ListZone = ({ data, viewZone, count }: Props) => {
   const getSelectZone = () => {
-    viewZone(data);
+    // viewZone(data);
   };
 
   return (
@@ -50,38 +49,7 @@ export const ListZone = ({ data, viewZone, count }: Props) => {
             </Typography>
           </Box>
         </CardContent>
-
-        {/* <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            p: "10px 0",
-          }}
-        >
-          <Button
-            size="small"
-            sx={{
-              borderRadius: "18px",
-            }}
-            variant="outlined"
-            onClick={getSelectZone}
-          >
-            Ver zona
-          </Button>
-        </Box> */}
       </Card>
-      {/* <div className="mt-4">
-        <div className="">
-          <ul className="">
-            <li className=" item-zone">
-              <p>{data.nameZone}</p>
-              <button onClick={getSelectZone} className="">
-                Ver zona
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div> */}
     </>
   );
 };
