@@ -72,6 +72,8 @@ export const DetailAnimal = () => {
     });
   };
 
+  console.log("render DetailAnimal");
+
   return (
     <>
       <Box
