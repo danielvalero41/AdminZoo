@@ -27,7 +27,6 @@ export const zooTheme = createTheme({
         InputProps: {
           sx: {
             borderRadius: "18px",
-            width: "255px",
           },
         },
         size: "small",

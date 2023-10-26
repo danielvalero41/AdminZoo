@@ -30,6 +30,8 @@ export const AdminZoo = () => {
                 <Route path="/" element={<Zone />} />
                 <Route path="/animals/:id" element={<Animals />} />
                 <Route path="/detalle-animal/:id" element={<DetailAnimal />} />
+                <Route path="/login" element={<AuthLogin />} />
+                <Route path="*" element={<h1>Not Found</h1>} />
               </Routes>
             )}
           </Box>

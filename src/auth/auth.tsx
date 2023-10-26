@@ -1,8 +1,30 @@
-import { Box } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
-type formProp = {
+const schema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "El correo es requerido" })
+    .email({ message: "El correo no es valido" })
+    .trim(),
+  password: z
+    .string()
+    .min(8, { message: "La contraseña debe tener minimo 8 caracteres" })
+    .regex(
+      new RegExp(
+        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+      ),
+      {
+        message:
+          "La contraseña debe tener al menos una mayuscula, una minuscula, un numero y un caracter especial",
+      }
+    ),
+});
+
+type FormInput = {
   email: string;
   password: string;
 };
@@ -15,56 +37,64 @@ export const AuthLogin = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-    reset,
-  } = useForm({ mode: "all" });
+  } = useForm<FormInput>({ mode: "all", resolver: zodResolver(schema) });
 
   const onSubmit = (data: any) => {
     console.log(data);
   };
 
   return (
-    <Box>
-      <h1>login</h1>
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography
+        sx={{ fontSize: "1.2rem", fontWeight: 600, marginTop: "40px" }}
+      >
+        Inicio de sesión
+      </Typography>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onInput={(e) => setEmail(e.currentTarget.value)}
-            {...register("email", {
-              required: { value: true, message: "Campo requerido" },
-              pattern: {
-                value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                message: "Correo no valido",
-              },
-            })}
-          />
-          {/* REVISAR ESTE ERROR */}
-          {/* {errors.email && <span>{errors.email.message}</span>} */}
-        </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "20%",
+        }}
+      >
+        <TextField
+          {...register("email")}
+          margin="dense"
+          fullWidth
+          type="text"
+          label="Email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.currentTarget.value)}
+          error={!!errors.email?.message}
+          helperText={errors.email?.message}
+        />
 
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onInput={(e) => setPassword(e.currentTarget.value)}
-            {...register("password", {
-              required: { value: true, message: "Campo requerido" },
-              minLength: {
-                value: 6,
-                message: "Minimo 6 caracteres",
-              },
-            })}
-          />
-        </div>
-
-        <button type="submit">Login</button>
+        <TextField
+          {...register("password")}
+          margin="dense"
+          fullWidth
+          label="Contraseña"
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.currentTarget.value)}
+          error={!!errors.password?.message}
+          helperText={errors.password?.message}
+        />
+        <Button type="submit" sx={{ marginTop: "16px" }}>
+          Login
+        </Button>
       </form>
     </Box>
   );
