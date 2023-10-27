@@ -9,7 +9,7 @@ type Props = {
 
 export const ListZone = ({ data, viewZone, count }: Props) => {
   const getSelectZone = () => {
-    // viewZone(data);
+    if (viewZone) viewZone(data);
   };
 
   return (

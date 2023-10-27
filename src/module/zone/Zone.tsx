@@ -4,9 +4,10 @@ import { ZooContext } from "../../context/ZooContext";
 import { AddZone } from "./components/AddZone";
 import { ListZone } from "./components/ListZone";
 import { getZones } from "../../services/zoneServices";
+import { CircularProgress } from "@mui/material";
 
 export const Zone = () => {
-  const { zoo, setZoo } = useContext(ZooContext);
+  const { zoo, setZoo, onSelectZone } = useContext(ZooContext);
 
   /**
    * Hay que conectar la lista de zona con el context
@@ -46,14 +47,18 @@ export const Zone = () => {
           flexWrap: "wrap",
         }}
       >
-        {zoo.map((zoo: any) => (
-          <ListZone
-            key={zoo.id}
-            count={zoo.animals.length}
-            data={zoo}
-            // viewZone={onSelectZone}
-          ></ListZone>
-        ))}
+        {zoo.length > 0 ? (
+          zoo.map((zoo: any) => (
+            <ListZone
+              key={zoo.id}
+              count={zoo.animals.length}
+              data={zoo}
+              viewZone={onSelectZone}
+            />
+          ))
+        ) : (
+          <CircularProgress />
+        )}
       </Box>
     </>
   );
