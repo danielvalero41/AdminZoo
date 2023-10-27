@@ -11,11 +11,11 @@ export const ZooProvider = ({ children }: Props) => {
   const navigate = useNavigate();
   const generateId = new Date().getUTCMilliseconds();
   const [positionZone, setpositionZone] = useState(0);
-  const [idZone, setIdZone] = useState(0);
+  const [idZone, setIdZone] = useState("0");
 
   const [zoo, setZoo] = useState<Array<DataZoo>>([]);
 
-  const onAddZone = (newZone: string, idZone: number): void => {
+  const onAddZone = (newZone: string, idZone: string): void => {
     setZoo((zoo) => [...zoo, { id: idZone, nameZone: newZone, animals: [] }]);
   };
 
@@ -45,8 +45,8 @@ export const ZooProvider = ({ children }: Props) => {
   const onAddAnimal = (
     nameAnimal: string,
     species: string,
-    idAnimal: number,
-    idZone: number
+    idAnimal: string,
+    idZone: string
   ): void => {
     let findZone = zoo.findIndex((x) => x.id === idZone);
 
@@ -66,9 +66,9 @@ export const ZooProvider = ({ children }: Props) => {
     body: string,
     author: string,
     date: string,
-    idComment: number,
-    idAnimal: number,
-    idZone: number
+    idComment: string,
+    idAnimal: string,
+    idZone: string
   ): void => {
     const auxZoo = [...zoo];
     let findZone = zoo.findIndex((x) => x.id === idZone);
@@ -93,10 +93,10 @@ export const ZooProvider = ({ children }: Props) => {
     body: string,
     author: string,
     date: string,
-    idComment: number,
-    idAnimal: number,
-    idZone: number,
-    idAnswer: number
+    idComment: string,
+    idAnimal: string,
+    idZone: string,
+    idAnswer: string
   ): void => {
     const auxZoo = [...zoo];
     let findZone = zoo.findIndex((x) => x.id === idZone);
@@ -126,7 +126,7 @@ export const ZooProvider = ({ children }: Props) => {
     navigate(`/animals/${value.id}`);
   };
 
-  const onSelectAnimal = (value: Animals, position: number, idZone: number) => {
+  const onSelectAnimal = (value: Animals, position: number, idZone: string) => {
     setpositionZone(position);
     setIdZone(idZone);
     navigate(`/detalle-animal/${value.id}`);
@@ -134,7 +134,7 @@ export const ZooProvider = ({ children }: Props) => {
 
   const getIndexZone = (id: string): number => {
     if (id) {
-      const findIndex = zoo.findIndex((x) => x.id === parseInt(id));
+      const findIndex = zoo.findIndex((x) => x.id === id);
       return findIndex;
     }
     return Object({});
@@ -142,24 +142,21 @@ export const ZooProvider = ({ children }: Props) => {
 
   const getZoneById = (id: string): DataZoo => {
     if (id) {
-      const numberId = parseInt(id);
-      return zoo.find((x) => x.id == numberId) ?? Object({});
+      return zoo.find((x) => x.id === id) ?? Object({});
     }
     return Object({});
   };
 
   const getAnimalById = (id: string): Animals => {
     if (id) {
-      const findIndex = zoo[positionZone].animals.findIndex(
-        (x) => x.id === parseInt(id)
-      );
+      const findIndex = zoo[positionZone].animals.findIndex((x) => x.id === id);
       return zoo[positionZone].animals[findIndex];
     }
     return Object({});
   };
 
   const getPositionAnimal = (id: string) => {
-    return zoo[positionZone].animals.findIndex((x) => x.id === parseInt(id!));
+    return zoo[positionZone].animals.findIndex((x) => x.id === id!);
   };
 
   const backMain = (value: boolean) => {
@@ -170,6 +167,7 @@ export const ZooProvider = ({ children }: Props) => {
     <ZooContext.Provider
       value={{
         zoo,
+        setZoo,
         positionZone,
         idZone,
         generateId,

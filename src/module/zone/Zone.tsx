@@ -6,7 +6,7 @@ import { ListZone } from "./components/ListZone";
 import { getZones } from "../../services/zoneServices";
 
 export const Zone = () => {
-  const { zoo, onSelectZone } = useContext(ZooContext);
+  const { zoo, setZoo } = useContext(ZooContext);
 
   /**
    * Hay que conectar la lista de zona con el context
@@ -16,10 +16,17 @@ export const Zone = () => {
 
   const loadZone = async () => {
     const data = await getZones();
-    console.log(data);
-    // if (data) {
-    //   setZoo(data.data as any);
-    // }
+    console.log(data.data, "data");
+    const auxZoo =
+      data?.data?.map((item) => {
+        return {
+          id: item._id,
+          nameZone: item.name,
+          animals: [],
+        };
+      }) ?? [];
+
+    if (auxZoo?.length > 0) setZoo(auxZoo);
   };
 
   useEffect(() => {
@@ -28,7 +35,7 @@ export const Zone = () => {
 
   return (
     <>
-      <AddZone></AddZone>
+      <AddZone />
 
       <Box
         sx={{

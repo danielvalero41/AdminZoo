@@ -6,7 +6,9 @@ export const createZone = async (name: string) => {
 };
 
 export const getZones = async () => {
-  const response = await GET("/zone");
+  const response = await GET<Array<{ _id: string; name: string; __v: number }>>(
+    "/zone"
+  );
   return response;
 };
 

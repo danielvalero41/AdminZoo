@@ -3,35 +3,36 @@ import { Animals, DataZoo } from "../model/DataZoo";
 
 export type ZooContextProps = {
   zoo: DataZoo[];
+  setZoo: (value: DataZoo[]) => void;
   positionZone: number;
-  idZone: number;
+  idZone: string;
   generateId: number;
-  onAddZone: (newZone: string, idZone: number) => void;
+  onAddZone: (newZone: string, idZone: string) => void;
   onSelectZone: (value: DataZoo) => void;
   onAddAnimal: (
     nameAnimal: string,
     specie: string,
-    idAnimal: number,
-    idZone: number
+    idAnimal: string,
+    idZone: string
   ) => void;
   onAddComment: (
     body: string,
     author: string,
     date: string,
-    idComment: number,
-    idAnimal: number,
-    idZone: number
+    idComment: string,
+    idAnimal: string,
+    idZone: string
   ) => void;
   onAddAnswer: (
     body: string,
     author: string,
     date: string,
-    idComment: number,
-    idAnimal: number,
-    idZone: number,
-    idAnswer: number
+    idComment: string,
+    idAnimal: string,
+    idZone: string,
+    idAnswer: string
   ) => void;
-  onSelectAnimal: (value: Animals, position: number, idZone: number) => void;
+  onSelectAnimal: (value: Animals, position: number, idZone: string) => void;
   getIndexZone: (id: string) => number;
   getZoneById: (id: string) => DataZoo;
   getAnimalById: (id: string) => Animals;

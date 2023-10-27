@@ -1,21 +1,21 @@
 export type DataZoo = {
-  id: number;
+  id: string;
   nameZone: string;
   animals: Animals[];
 };
 
 export type Animals = {
-  id: number;
-  idZone: number;
+  id: string;
+  idZone: string;
   nameAnimal: string;
   species: string;
   comments: Comments[];
 };
 
 export type Comments = {
-  id: number;
-  idZone: number;
-  idAnimal: number;
+  id: string;
+  idZone: string;
+  idAnimal: string;
   body: string;
   author: string;
   date: string;
@@ -23,10 +23,10 @@ export type Comments = {
 };
 
 export type Answer = {
-  id: number;
-  idZone: number;
-  idAnimal: number;
-  idComment: number;
+  id: string;
+  idZone: string;
+  idAnimal: string;
+  idComment: string;
   body: string;
   author: string;
   date: string;
