@@ -6,7 +6,7 @@ export type ZooContextProps = {
   setZoo: (value: DataZoo[]) => void;
   positionZone: number;
   idZone: string;
-  generateId: number;
+  generateId: string;
   onAddZone: (newZone: string, idZone: string) => void;
   onSelectZone: (value: DataZoo) => void;
   onAddAnimal: (

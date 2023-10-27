@@ -1,13 +1,9 @@
 import { AddCircle } from "@mui/icons-material";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { ZooContext } from "../../../context/ZooContext";
 import { createZone } from "../../../services/zoneServices";
 import { ModalError } from "../../../components/Modal/ModalError/ModalError";
-
-// type Props = {
-//     onNewZone:(name:string,id:number)=>void
-// }
 
 export const AddZone = () => {
   const { generateId, onAddZone } = useContext(ZooContext);
@@ -43,27 +39,31 @@ export const AddZone = () => {
       <Box
         sx={{
           display: "flex",
-          gap: "10px",
+          marginTop: "30px",
+          flexDirection: "column",
         }}
       >
-        <TextField
-          label="Ingrese el nombre de la zona"
-          variant="outlined"
-          onChange={(event) => onGetValueInput(event.target.value)}
-          value={nameZone}
-        />
-        <Button
-          size="small"
-          sx={{
-            color: "#FFF",
-            borderRadius: "18px",
-          }}
-          variant="contained"
-          startIcon={<AddCircle />}
-          onClick={Add}
-        >
-          Agregar zona
-        </Button>
+        <Box sx={{ display: "flex", gap: "10px" }}>
+          <TextField
+            sx={{ width: "400px" }}
+            label="Ingrese el nombre de la zona"
+            variant="outlined"
+            onChange={(event) => onGetValueInput(event.target.value)}
+            value={nameZone}
+          />
+          <Button
+            size="small"
+            sx={{
+              color: "#FFF",
+              borderRadius: "18px",
+            }}
+            variant="contained"
+            startIcon={<AddCircle />}
+            onClick={Add}
+          >
+            Agregar zona
+          </Button>
+        </Box>
       </Box>
 
       {/* MODAL */}
