@@ -14,6 +14,7 @@ import { ZooContext } from "../../../context/ZooContext";
 import { Comments } from "../../../model/DataZoo";
 import { AddAnswer } from "./components/AddAnswer";
 import { CommentAnswer } from "./components/CommentAnswer";
+import { getAnimals } from "../../../services/animalServices";
 
 export const DetailAnimal = () => {
   const {
@@ -72,7 +73,14 @@ export const DetailAnimal = () => {
     });
   };
 
-  console.log("render DetailAnimal");
+  const loadAnimal = async () => {
+    const data = await getAnimals();
+    console.log(data.data, "data");
+  };
+
+  useEffect(() => {
+    loadAnimal();
+  }, []);
 
   return (
     <>

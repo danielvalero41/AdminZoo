@@ -2,13 +2,19 @@ import { AddCircle } from "@mui/icons-material";
 import { Box, Button, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { ZooContext } from "../../../context/ZooContext";
+import { createAnimal } from "../../../services/animalServices";
+import { createdSpecie } from "../../../services/specieServices";
+import { ModalError } from "../../../components/Modal/ModalError/ModalError";
 
 type Props = {
-  idZone: number;
+  idZone: number | string;
 };
 
 export const AddAnimal = ({ idZone }: Props) => {
   const { generateId, onAddAnimal } = useContext(ZooContext);
+
+  const [error, setError] = useState(false);
+  const [msjError, setMsjError] = useState("");
 
   const [dataAnimal, setDataAnimal] = useState({
     nameAnimal: "",
@@ -21,8 +27,33 @@ export const AddAnimal = ({ idZone }: Props) => {
       dataAnimal.specie.trim().length <= 1
     )
       return;
-    onAddAnimal(dataAnimal.nameAnimal, dataAnimal.specie, generateId, idZone);
-    setDataAnimal({ nameAnimal: "", specie: "" });
+
+    addSpecies(dataAnimal.specie);
+
+    // onAddAnimal(dataAnimal.nameAnimal, dataAnimal.specie, generateId, idZone);
+    // setDataAnimal({ nameAnimal: "", specie: "" });
+  };
+
+  const addAnimal = async (name: string, species: string, zone: string) => {
+    const { data: dataAnimal } = await createAnimal(name, species, zone);
+    console.log(dataAnimal, "dataAnimal");
+  };
+
+  const addSpecies = async (name: string) => {
+    const { data: dataSpecies, error: error } = await createdSpecie(name);
+    console.log(dataSpecies, "dataSpecies");
+
+    if (dataSpecies) {
+      addAnimal(dataAnimal.nameAnimal, name, idZone.toString());
+    } else {
+      if (error.message === "Specie already exists") {
+        addAnimal(dataAnimal.nameAnimal, name, idZone.toString());
+        return;
+      }
+      setError(true);
+      setMsjError("Esta especie ya existe");
+      return;
+    }
   };
 
   const getValueInput = (name: string, value: string) => {
@@ -71,35 +102,7 @@ export const AddAnimal = ({ idZone }: Props) => {
           Agregar animal
         </Button>
       </Box>
-
-      {/* <div>
-        <input
-          className=""
-          type="text"
-          name="nameAnimal"
-          placeholder="Ingrese nombre del animal..."
-          onChange={(event) =>
-            getValueInput(event.target.name, event.target.value)
-          }
-          value={dataAnimal.nameAnimal}
-        />
-        <input
-          className="mt-4"
-          type="text"
-          name="specie"
-          placeholder="Ingrese nombre de la especie..."
-          onChange={(event) =>
-            getValueInput(event.target.name, event.target.value)
-          }
-          value={dataAnimal.specie}
-        />
-
-        <div className="groupButton">
-          <button className="mt-2" onClick={Add}>
-            Agregar animal
-          </button>
-        </div>
-      </div> */}
+      <ModalError open={error} msjError={msjError} setClose={setError} />
     </>
   );
 };
