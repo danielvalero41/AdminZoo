@@ -5,8 +5,8 @@ import InsertCommentIcon from "@mui/icons-material/InsertComment";
 type Props = {
   data: Animals;
   position: number;
-  idZone: number;
-  viewAnimal: (value: Animals, position: number, idZone: number) => void;
+  idZone: string;
+  viewAnimal: (value: Animals, position: number, idZone: string) => void;
 };
 
 export const ListAnimals = ({ data, viewAnimal, position, idZone }: Props) => {

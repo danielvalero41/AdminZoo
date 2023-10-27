@@ -22,15 +22,16 @@ export const Animals = () => {
   };
 
   return (
-    <>
+    <Box sx={{ width: "100%" }}>
       <Typography
         sx={{
           color: "primary.main",
           fontWeight: "bold",
-          fontSize: "18px",
+          fontSize: "2rem",
+          textTransform: "capitalize",
         }}
       >
-        {data.nameZone}
+        Zona {data.nameZone}
       </Typography>
 
       <AddAnimal idZone={parseInt(id!)}></AddAnimal>
@@ -52,7 +53,7 @@ export const Animals = () => {
             position={index}
             idZone={data.id}
             viewAnimal={onSelectAnimal}
-          ></ListAnimals>
+          />
         ))}
       </Box>
 
@@ -73,6 +74,6 @@ export const Animals = () => {
           Regresar
         </Typography>
       </Box>
-    </>
+    </Box>
   );
 };
