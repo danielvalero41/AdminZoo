@@ -4,16 +4,10 @@ import { ZooContext } from "../../context/ZooContext";
 import { AddZone } from "./components/AddZone";
 import { ListZone } from "./components/ListZone";
 import { getZones } from "../../services/zoneServices";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 
 export const Zone = () => {
   const { zoo, setZoo, onSelectZone } = useContext(ZooContext);
-
-  /**
-   * Hay que conectar la lista de zona con el context
-   */
-
-  // const [zoo, setZoo] = useState([]);
 
   const loadZone = async () => {
     const data = await getZones();
@@ -35,7 +29,25 @@ export const Zone = () => {
   }, []);
 
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
+      <Typography
+        sx={{
+          color: "primary.main",
+          fontWeight: "bold",
+          fontSize: "2rem",
+          textTransform: "capitalize",
+        }}
+      >
+        Zonas del zoológico
+      </Typography>
+
       <AddZone />
 
       <Box
@@ -45,6 +57,7 @@ export const Zone = () => {
           marginTop: "30px",
           gap: "30px",
           flexWrap: "wrap",
+          width: "100%",
         }}
       >
         {zoo.length > 0 ? (
@@ -60,6 +73,6 @@ export const Zone = () => {
           <CircularProgress />
         )}
       </Box>
-    </>
+    </Box>
   );
 };
