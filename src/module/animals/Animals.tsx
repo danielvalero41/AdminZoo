@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ZooContext } from "../../context/ZooContext";
 import { AddAnimal } from "./components/AddAnimal";
@@ -16,6 +16,8 @@ export const Animals = () => {
   const index = getIndexZone(id!);
 
   const navigate = useNavigate();
+
+  console.log(data, "data");
 
   const toBack = () => {
     navigate(`/zona`);
@@ -34,7 +36,7 @@ export const Animals = () => {
         Zona {data.nameZone}
       </Typography>
 
-      <AddAnimal idZone={parseInt(id!)}></AddAnimal>
+      <AddAnimal idZone={data.id}></AddAnimal>
 
       <Box
         sx={{
