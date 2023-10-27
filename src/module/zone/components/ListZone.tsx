@@ -16,39 +16,40 @@ export const ListZone = ({ data, viewZone, count }: Props) => {
     <>
       <Card
         sx={{
-          width: "31%",
+          width: "280px",
           borderRadius: "12px",
+          padding: "16px",
         }}
-        elevation={3}
+        elevation={1}
       >
-        <CardContent>
-          <Box
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            variant="button"
+            onClick={getSelectZone}
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
+              fontWeight: "bold",
+              color: "primary.main",
+              cursor: "pointer",
+              fontSize: "1rem",
             }}
           >
-            <Typography
-              variant="button"
-              onClick={getSelectZone}
-              sx={{
-                fontWeight: "bold",
-                color: "primary.main",
-                cursor: "pointer",
-              }}
-            >
-              {data.nameZone}
-            </Typography>
+            {data.nameZone}
+          </Typography>
 
-            <Typography
-              sx={{
-                fontSize: "14px",
-              }}
-            >
-              Cantidad de animales:{count}{" "}
-            </Typography>
-          </Box>
-        </CardContent>
+          <Typography
+            sx={{
+              fontSize: "0.8rem",
+              opacity: "0.5",
+            }}
+          >
+            Cantidad de animales:{" " + count}{" "}
+          </Typography>
+        </Box>
       </Card>
     </>
   );

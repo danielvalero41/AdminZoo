@@ -55,7 +55,7 @@ export const Zone = () => {
           display: "flex",
           alignItems: "center",
           marginTop: "30px",
-          gap: "30px",
+          gap: "12px",
           flexWrap: "wrap",
           width: "100%",
         }}
