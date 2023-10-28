@@ -1,23 +1,73 @@
 import { Box, Typography } from "@mui/material";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ZooContext } from "../../context/ZooContext";
 import { AddAnimal } from "./components/AddAnimal";
 import { useNavigate } from "react-router";
 import { ListAnimals } from "./components/ListAnimals";
+import { getAnimals } from "../../services/animalServices";
+import { getSpecies } from "../../services/specieServices";
+
+type AnimalsProps = {
+  _id: string;
+  name: string;
+  zone: string;
+  species: string;
+};
 
 export const Animals = () => {
-  const { zoo, onSelectAnimal, getIndexZone, getZoneById } =
-    useContext(ZooContext);
+  const {
+    onSelectAnimal,
+    getIndexZone,
+    getZoneById,
+    reloadAnimals,
+    setReloadAnimals,
+  } = useContext(ZooContext);
 
   const { id } = useParams();
+
+  const [zoo, setZoo] = useState<AnimalsProps[]>([]);
+  const [arraySpecies, setArraySpecies] = useState<any>([]);
 
   const data = getZoneById(id!);
   const index = getIndexZone(id!);
 
   const navigate = useNavigate();
 
-  console.log(data, "data");
+  const loadAnimals = async () => {
+    const { data: data, error: error } = await getAnimals();
+
+    if (data) {
+      setZoo(data);
+    }
+  };
+
+  const loadSpecies = async () => {
+    const data = await getSpecies();
+
+    console.log(data, "data");
+    if (data) {
+      setArraySpecies(data.data);
+      loadAnimals();
+    }
+  };
+
+  const nameForSpecies = (id: string, arraySpecie: any) => {
+    const specie = arraySpecie.find((x: any) => x._id === id);
+
+    return specie?.name;
+  };
+
+  useEffect(() => {
+    loadSpecies();
+  }, []);
+
+  useEffect(() => {
+    if (reloadAnimals) {
+      loadAnimals();
+      setReloadAnimals(false);
+    }
+  }, [reloadAnimals]);
 
   const toBack = () => {
     navigate(`/zona`);
@@ -48,13 +98,16 @@ export const Animals = () => {
           flexWrap: "wrap",
         }}
       >
-        {zoo[index].animals.map((animal) => (
+        {zoo.map((animal) => (
           <ListAnimals
-            key={animal.id}
-            data={animal}
+            key={animal._id}
+            data={{
+              nameAnimal: animal.name,
+              species: nameForSpecies(animal.species, arraySpecies),
+            }}
             position={index}
-            idZone={data.id}
-            viewAnimal={onSelectAnimal}
+            idZone={animal.zone}
+            // viewAnimal={onSelectAnimal}
           />
         ))}
       </Box>

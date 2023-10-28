@@ -12,6 +12,7 @@ export const ZooProvider = ({ children }: Props) => {
   const generateId = new Date().getUTCMilliseconds();
   const [positionZone, setpositionZone] = useState(0);
   const [idZone, setIdZone] = useState("0");
+  const [reloadAnimals, setReloadAnimals] = useState(false);
 
   const [zoo, setZoo] = useState<Array<DataZoo>>([]);
 
@@ -124,7 +125,7 @@ export const ZooProvider = ({ children }: Props) => {
     navigate(`/animals/${value.id}`);
   };
 
-  const onSelectAnimal = (value: Animals, position: number, idZone: string) => {
+  const onSelectAnimal = (value: any, position: number, idZone: string) => {
     setpositionZone(position);
     setIdZone(idZone);
     navigate(`/detalle-animal/${value.id}`);
@@ -169,6 +170,8 @@ export const ZooProvider = ({ children }: Props) => {
         positionZone,
         idZone,
         generateId,
+        reloadAnimals,
+        setReloadAnimals,
         onAddZone,
         onSelectZone,
         onAddAnimal,

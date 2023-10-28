@@ -2,6 +2,8 @@ import { createContext } from "react";
 import { Animals, DataZoo } from "../model/DataZoo";
 
 export type ZooContextProps = {
+  reloadAnimals: boolean;
+  setReloadAnimals: (value: boolean) => void;
   zoo: DataZoo[];
   setZoo: (value: DataZoo[]) => void;
   positionZone: number;
