@@ -13,6 +13,8 @@ import {
   dataZone,
 } from "../model/dataView";
 import { ContentTypeSearch } from "../layout/ContentTypeSearch";
+import { getSearch } from "../services/searchServices";
+import { ModalError } from "./Modal/ModalError/ModalError";
 
 type Props = {
   setType: (value: string) => void;
@@ -413,6 +415,8 @@ export const NavBar = ({ isSearching, type, setType }: Props) => {
 
   const [searchText, setSearchText] = useState("");
   const [result, setResult] = useState(Object({}));
+  const [error, setError] = useState(false);
+  const [msjError, setMsjError] = useState("");
 
   let positionZone: number[] = [];
   let positionAnimal: number[] = [];
@@ -741,16 +745,30 @@ export const NavBar = ({ isSearching, type, setType }: Props) => {
 
   const onSearch = () => {
     if (searchText.trim().length <= 0) return;
-    if (isSearchByZone()) searchByZone();
-    else if (isSearchByAnimal()) searchByAnimal();
-    else if (isSearchBySpecies()) searchByAnimal();
-    else if (isSearchByComment()) searchByComment();
-    else if (isSearchByAnswer()) searchByAnswer();
-    else {
-      setResult("No se encontraron resultados");
-      setType(TypeSearch.Nofound);
+    // if (isSearchByZone()) searchByZone();
+    // else if (isSearchByAnimal()) searchByAnimal();
+    // else if (isSearchBySpecies()) searchByAnimal();
+    // else if (isSearchByComment()) searchByComment();
+    // else if (isSearchByAnswer()) searchByAnswer();
+    // else {
+    //   setResult("No se encontraron resultados");
+    //   setType(TypeSearch.Nofound);
+    // }
+
+    search(searchText);
+  };
+
+  //TERMIANR DE CONECTAR
+
+  const search = async (searchText: string) => {
+    const { data: data } = await getSearch(searchText);
+    console.log(data);
+
+    if ((data as any).length === 0) {
+      setError(true);
+      setMsjError("No se encontraron resultados");
+      setSearchText("");
     }
-    setSearchText("");
   };
 
   return (
@@ -780,7 +798,7 @@ export const NavBar = ({ isSearching, type, setType }: Props) => {
           </Typography>
         </Box>
 
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             gap: "4px",
@@ -805,7 +823,7 @@ export const NavBar = ({ isSearching, type, setType }: Props) => {
             }}
             onClick={onSearch}
           />
-        </Box>
+        </Box> */}
       </Box>
 
       {isSearching && (
@@ -821,6 +839,9 @@ export const NavBar = ({ isSearching, type, setType }: Props) => {
           <ViewDataSearch type={type} result={result} setType={setType} />
         </Box>
       )}
+
+      {/* MODAL */}
+      <ModalError open={error} msjError={msjError} setClose={setError} />
     </>
   );
 };
