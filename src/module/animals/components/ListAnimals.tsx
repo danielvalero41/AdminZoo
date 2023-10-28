@@ -3,15 +3,25 @@ import { Animals, DataZoo } from "../../../model/DataZoo";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
 
 type Props = {
-  data: Animals;
+  data: {
+    nameAnimal: string;
+    species: string;
+  };
   position: number;
   idZone: string;
-  viewAnimal: (value: Animals, position: number, idZone: string) => void;
+  viewAnimal?: (
+    value: {
+      nameAnimal: string;
+      species: string;
+    },
+    position: number,
+    idZone: string
+  ) => void;
 };
 
 export const ListAnimals = ({ data, viewAnimal, position, idZone }: Props) => {
   const getSelectAnimal = () => {
-    viewAnimal(data, position, idZone);
+    // viewAnimal(data, position, idZone);
   };
 
   return (

@@ -2,7 +2,7 @@ import { AddCircle } from "@mui/icons-material";
 import { Box, Button, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { ZooContext } from "../../../context/ZooContext";
-import { createAnimal } from "../../../services/animalServices";
+import { createAnimal, getAnimals } from "../../../services/animalServices";
 import { createdSpecie } from "../../../services/specieServices";
 import { ModalError } from "../../../components/Modal/ModalError/ModalError";
 
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const AddAnimal = ({ idZone }: Props) => {
-  const { generateId, onAddAnimal } = useContext(ZooContext);
+  const { generateId, onAddAnimal, setReloadAnimals } = useContext(ZooContext);
 
   const [error, setError] = useState(false);
   const [msjError, setMsjError] = useState("");
@@ -29,19 +29,17 @@ export const AddAnimal = ({ idZone }: Props) => {
       return;
 
     addSpecies(dataAnimal.specie);
-
-    // onAddAnimal(dataAnimal.nameAnimal, dataAnimal.specie, generateId, idZone);
-    // setDataAnimal({ nameAnimal: "", specie: "" });
   };
 
   const addAnimal = async (name: string, species: string, zone: string) => {
     const { data: dataAnimal } = await createAnimal(name, species, zone);
-    console.log(dataAnimal, "dataAnimal");
+    if (dataAnimal) {
+      setReloadAnimals(true);
+    }
   };
 
   const addSpecies = async (name: string) => {
     const { data: dataSpecies, error: error } = await createdSpecie(name);
-    console.log(dataSpecies, "dataSpecies");
 
     if (dataSpecies) {
       addAnimal(dataAnimal.nameAnimal, name, idZone.toString());

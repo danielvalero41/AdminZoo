@@ -10,7 +10,7 @@ export const createAnimal = async (
 };
 
 export const getAnimals = async () => {
-  const response = await GET("/animals");
+  const response = await GET<[]>("/animals");
   return response;
 };
 
