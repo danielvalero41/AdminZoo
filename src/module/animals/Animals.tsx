@@ -38,7 +38,8 @@ export const Animals = () => {
     const { data: data, error: error } = await getAnimals();
 
     if (data) {
-      setZoo(data);
+      const auxData = data.filter((x: any) => x.zone === id);
+      setZoo(auxData);
     }
   };
 
