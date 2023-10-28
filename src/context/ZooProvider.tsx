@@ -9,7 +9,7 @@ type Props = {
 
 export const ZooProvider = ({ children }: Props) => {
   const navigate = useNavigate();
-  const generateId = new Date().getUTCMilliseconds();
+  const generateId = new Date().getUTCMilliseconds().toString();
   const [positionZone, setpositionZone] = useState(0);
   const [idZone, setIdZone] = useState("0");
 
