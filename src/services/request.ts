@@ -55,7 +55,7 @@ async function PUT<T = unknown, P = object | string | number>(
   body: P
 ): AsyncReturnType<T> {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(baseApiURL + url, {
       method: "PUT",
       headers: {
         ...(localStorage.getItem("tokenZoo") && {
@@ -75,7 +75,7 @@ async function PUT<T = unknown, P = object | string | number>(
 
 async function DELETE<T = unknown>(url: string): AsyncReturnType<T> {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(baseApiURL + url, {
       method: "DELETE",
       headers: {
         ...(localStorage.getItem("tokenZoo") && {

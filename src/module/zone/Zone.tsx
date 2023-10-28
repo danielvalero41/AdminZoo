@@ -54,15 +54,17 @@ export const Zone = () => {
         sx={{
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
           marginTop: "30px",
           gap: "12px",
           flexWrap: "wrap",
-          width: "100%",
+          width: "70%",
         }}
       >
         {zoo.length > 0 ? (
           zoo.map((zoo: any) => (
             <ListZone
+              loadZone={loadZone}
               key={zoo.id}
               count={zoo.animals.length}
               data={zoo}
