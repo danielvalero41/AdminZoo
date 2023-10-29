@@ -6,17 +6,18 @@ import { Comments } from "../model/DataZoo";
 import { TypeSearch } from "../model/EnumTypeSearch";
 import { ContentSearch } from "../layout/ContentSearch";
 import { BackToMain } from "./BackToMain";
-import {
-  dataAnimal,
-  dataAnswer,
-  dataComment,
-  dataZone,
-} from "../model/dataView";
+
 import { ContentTypeSearch } from "../layout/ContentTypeSearch";
 import { getSearch } from "../services/searchServices";
 import { ModalError } from "./Modal/ModalError/ModalError";
 import { FileDownload } from "@mui/icons-material";
 import { downloadZoneReports } from "../services/zoneReports";
+import {
+  dataAnimal,
+  dataAnswer,
+  dataComment,
+  dataZone,
+} from "../model/DataView";
 
 type Props = {
   setType: (value: string) => void;
