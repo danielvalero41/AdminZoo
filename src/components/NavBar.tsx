@@ -15,6 +15,8 @@ import {
 import { ContentTypeSearch } from "../layout/ContentTypeSearch";
 import { getSearch } from "../services/searchServices";
 import { ModalError } from "./Modal/ModalError/ModalError";
+import { FileDownload } from "@mui/icons-material";
+import { downloadZoneReports } from "../services/zoneReports";
 
 type Props = {
   setType: (value: string) => void;
@@ -771,6 +773,11 @@ export const NavBar = ({ isSearching, type, setType }: Props) => {
     }
   };
 
+  const downloadfile = async () => {
+    const data = await downloadZoneReports();
+    console.log(data);
+  };
+
   return (
     <>
       <Box
@@ -798,32 +805,28 @@ export const NavBar = ({ isSearching, type, setType }: Props) => {
           </Typography>
         </Box>
 
-        {/* <Box
-          sx={{
-            display: "flex",
-            gap: "4px",
-            alignItems: "center",
-          }}
-        >
-          <TextField
+        {localStorage.getItem("tokenZoo") && (
+          <Box
             sx={{
-              backgroundColor: "#FFF",
-              borderRadius: "18px",
-            }}
-            size="small"
-            placeholder="Buscar..."
-            onChange={(event) => getValueInput(event.target.value)}
-            value={searchText}
-          ></TextField>
-          <SearchIcon
-            sx={{
+              display: "flex",
+              gap: "4px",
+              alignItems: "center",
               color: "#FFF",
               cursor: "pointer",
               fontWeight: "bold",
             }}
-            onClick={onSearch}
-          />
-        </Box> */}
+            onClick={downloadfile}
+          >
+            <Typography>Descargar reporte</Typography>
+            <FileDownload
+              sx={{
+                color: "#FFF",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            />
+          </Box>
+        )}
       </Box>
 
       {isSearching && (
