@@ -18,8 +18,16 @@ export const replyComment = async (
   return response;
 };
 
+type ResponseComment = Array<{
+  _id: string;
+  animal: string;
+  author: string;
+  body: string;
+  date: string;
+  replies: Array<string>;
+}>;
 export const getComments = async () => {
-  const response = await GET(`/comment`);
+  const response = await GET<ResponseComment>(`/comment`);
   return response;
 };
 

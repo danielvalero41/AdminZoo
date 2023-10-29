@@ -110,19 +110,10 @@ export const DetailAnimal = () => {
   const loadComment = async () => {
     const data = await getComments();
     console.log(data.data, "data");
-    const aux: allCommentAnimalProps[] = [];
-    (data.data as allCommentAnimalProps[]).forEach((element) => {
-      let commet = {
-        _id: element._id,
-        author: element.author,
-        body: element.body,
-        date: formatDate(element.date),
-        animal: element.animal,
-        replies: element.replies,
-      };
-      aux.push(commet);
-    });
-    setAllCommentAnimal(aux);
+    if (data.data) {
+      const aux = data?.data?.filter((element) => element.animal === id);
+      setAllCommentAnimal(aux);
+    }
   };
 
   useEffect(() => {
