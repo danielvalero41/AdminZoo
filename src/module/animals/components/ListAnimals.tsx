@@ -21,7 +21,8 @@ type Props = {
 
 export const ListAnimals = ({ data, viewAnimal, position, idZone }: Props) => {
   const getSelectAnimal = () => {
-    // viewAnimal(data, position, idZone);
+    //REVISAR COMENTARIOS
+    // navigate(`/detalle-animal/${value.id}`);
   };
 
   return (

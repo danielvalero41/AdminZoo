@@ -45,8 +45,6 @@ export const Animals = () => {
 
   const loadSpecies = async () => {
     const data = await getSpecies();
-
-    console.log(data, "data");
     if (data) {
       setArraySpecies(data.data);
       loadAnimals();

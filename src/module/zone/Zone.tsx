@@ -11,7 +11,6 @@ export const Zone = () => {
 
   const loadZone = async () => {
     const data = await getZones();
-    console.log(data.data, "data");
     const auxZoo =
       data?.data?.map((item) => {
         return {
