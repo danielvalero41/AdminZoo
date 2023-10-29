@@ -21,6 +21,7 @@ type Props = {
     id: string;
   };
   position: number;
+  loadAnimals: () => void;
   idZone: string;
   viewAnimal?: (
     value: {
@@ -32,19 +33,22 @@ type Props = {
   ) => void;
 };
 
-export const ListAnimals = ({ data, viewAnimal, position, idZone }: Props) => {
+export const ListAnimals = ({
+  data,
+  viewAnimal,
+  position,
+  idZone,
+  loadAnimals,
+}: Props) => {
   const [edit, setEdit] = useState(false);
   const { setReloadAnimals } = useContext(ZooContext);
+  const [nameAnimal, setNameAnimal] = useState(data.nameAnimal);
+  const [species, setSpecies] = useState(data.species);
 
   const update = async () => {
-    const response = await updateAnimal(
-      data.id,
-      data.nameAnimal,
-      data.species,
-      idZone
-    );
+    const response = await updateAnimal(data.id, nameAnimal, species, idZone);
     if (response) {
-      setReloadAnimals(true);
+      await loadAnimals();
       setEdit(false);
     }
   };
@@ -127,10 +131,12 @@ export const ListAnimals = ({ data, viewAnimal, position, idZone }: Props) => {
               <TextField
                 defaultValue={data.nameAnimal}
                 label={"Nombre del animal"}
+                onChange={(e) => setNameAnimal(e.target.value)}
               />
               <TextField
                 defaultValue={data.species}
                 label={"Nombre de la especie"}
+                onChange={(e) => setSpecies(e.target.value)}
               />
             </Box>
 

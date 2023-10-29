@@ -54,7 +54,12 @@ export const ListZone = ({ data, viewZone, count, loadZone }: Props) => {
         }}
         elevation={2}
       >
-        {!edit && <EditDelete clickDelete={getDeleteZone} clickEdif={update} />}
+        {!edit && (
+          <EditDelete
+            clickDelete={getDeleteZone}
+            clickEdif={() => setEdit(true)}
+          />
+        )}
 
         {!edit && (
           <Typography

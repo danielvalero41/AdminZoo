@@ -109,6 +109,7 @@ export const Animals = () => {
             }}
             position={index}
             idZone={animal.zone}
+            loadAnimals={loadAnimals}
             // viewAnimal={onSelectAnimal}
           />
         ))}
