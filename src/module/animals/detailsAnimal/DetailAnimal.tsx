@@ -15,6 +15,22 @@ import { Comments } from "../../../model/DataZoo";
 import { AddAnswer } from "./components/AddAnswer";
 import { CommentAnswer } from "./components/CommentAnswer";
 import { getAnimals } from "../../../services/animalServices";
+import { createComment, getComments } from "../../../services/commentServices";
+import { formatDate } from "../../../util/getFormatedDate";
+
+type Comentario = {
+  author: string;
+  body: string;
+};
+
+type allCommentAnimalProps = {
+  _id: string;
+  author: string;
+  body: string;
+  date: string;
+  animal: string;
+  replies: string[];
+};
 
 export const DetailAnimal = () => {
   const {
@@ -22,20 +38,27 @@ export const DetailAnimal = () => {
     positionZone,
     idZone,
     generateId,
+    getIdZone,
     getAnimalById,
     getPositionAnimal,
     onAddComment,
     getDateCurrent,
+    reloadComment,
+    setReloadComment,
   } = useContext(ZooContext);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [comment, setComment] = useState<Comments>(Object({}));
+  const [allCommentAnimal, setAllCommentAnimal] = useState<
+    allCommentAnimalProps[]
+  >([]);
+  const [comment, setComment] = useState<Comentario>(Object({}));
   const [isEnableView, setIsEnableView] = useState(false);
+  const [nameAnimal, setNameAnimal] = useState("");
 
   const dataAnimal = getAnimalById(id!);
 
   const toBack = () => {
-    navigate(`/animals/${idZone}`);
+    navigate(`/animals/${getIdZone}`);
   };
 
   const handleChange = ({
@@ -52,35 +75,69 @@ export const DetailAnimal = () => {
     setIsEnableView(true);
   };
 
+  const createCommentForEndpoint = async () => {
+    const data = await createComment(comment.body, comment.author, id ?? "");
+    console.log(data);
+
+    if (data) {
+      setComment({
+        body: "",
+        author: "",
+      });
+      loadComment();
+    }
+  };
+
   const addComment = () => {
     if (!comment.author || !comment.body) return;
-    onAddComment(
-      comment?.body!,
-      comment?.author!,
-      getDateCurrent(),
-      generateId,
-      parseInt(id!),
-      idZone
-    );
-    setComment({
-      id: 0,
-      idAnimal: 0,
-      idZone: 0,
-      author: "",
-      body: "",
-      date: "",
-      answer: [],
-    });
+    createCommentForEndpoint();
   };
 
   const loadAnimal = async () => {
     const data = await getAnimals();
+
+    if (data.data && data.data?.length > 0) {
+      const aux: {
+        _id: string;
+        name: string;
+      }[] = data.data;
+
+      const animal = aux.find((animal) => animal._id === id);
+      setNameAnimal(animal?.name ?? "");
+    }
+  };
+
+  const loadComment = async () => {
+    const data = await getComments();
     console.log(data.data, "data");
+    const aux: allCommentAnimalProps[] = [];
+    (data.data as allCommentAnimalProps[]).forEach((element) => {
+      let commet = {
+        _id: element._id,
+        author: element.author,
+        body: element.body,
+        date: formatDate(element.date),
+        animal: element.animal,
+        replies: element.replies,
+      };
+      aux.push(commet);
+    });
+    setAllCommentAnimal(aux);
   };
 
   useEffect(() => {
     loadAnimal();
+    loadComment();
   }, []);
+
+  useEffect(() => {
+    if (reloadComment) {
+      loadComment();
+      setReloadComment(false);
+    }
+  }, [reloadComment]);
+
+  console.log(allCommentAnimal);
 
   return (
     <>
@@ -97,10 +154,10 @@ export const DetailAnimal = () => {
             fontSize: "18px",
           }}
         >
-          Nombre del animal: {dataAnimal.nameAnimal}
+          Nombre del animal: {nameAnimal}
         </Typography>
 
-        <Typography>Especie: {dataAnimal.species}</Typography>
+        {/* <Typography>Especie: {dataAnimal.species}</Typography> */}
       </Box>
 
       <Box
@@ -152,99 +209,87 @@ export const DetailAnimal = () => {
           marginTop: "30px",
         }}
       >
-        {zoo[positionZone].animals[getPositionAnimal(id!)].comments?.map(
-          (comments) => (
-            <Card
-              key={comments.id}
-              sx={{
-                width: "31%",
-                borderRadius: "12px",
-              }}
-              elevation={3}
-            >
-              <CardContent>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: "4px",
-                    alignItems: "baseline",
-                    minHeight: "70px",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      minWidth: "fit-content",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {comments.author}:
-                    </Typography>
-                  </Box>
-
-                  <Box
-                    sx={{
-                      width: "100%",
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    <Typography>"{comments.body}"</Typography>
-
-                    <Typography
-                      sx={{
-                        marginTop: "10px",
-                        color: "#707070",
-                        opacity: "0.7",
-                        textAlign: "end",
-                        fontSize: "12px",
-                      }}
-                    >
-                      {comments.date}
-                    </Typography>
-                  </Box>
-                </Box>
-              </CardContent>
-              <CardActions
+        {allCommentAnimal.map((comments) => (
+          <Card
+            key={comments._id}
+            sx={{
+              width: "31%",
+              borderRadius: "12px",
+            }}
+            elevation={3}
+          >
+            <CardContent>
+              <Box
                 sx={{
-                  padding: "16px",
+                  display: "flex",
+                  gap: "4px",
+                  alignItems: "baseline",
+                  minHeight: "70px",
                 }}
               >
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
+                    alignItems: "baseline",
+                    minWidth: "fit-content",
                   }}
                 >
-                  <AddAnswer idComment={comments.id} />
-
-                  {!isEnableView && !!comments.answer.length ? (
-                    <Typography
-                      onClick={viewAnswer}
-                      variant="button"
-                      sx={{
-                        color: "primary.main",
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                      }}
-                    >
-                      Ver respuestas
-                    </Typography>
-                  ) : (
-                    comments.answer?.map((answer) => (
-                      <CommentAnswer key={answer.id} data={answer} />
-                    ))
-                  )}
+                  <Typography
+                    sx={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {comments.author}:
+                  </Typography>
                 </Box>
-              </CardActions>
-            </Card>
-          )
-        )}
+
+                <Box
+                  sx={{
+                    width: "100%",
+                    wordWrap: "break-word",
+                  }}
+                >
+                  <Typography>"{comments.body}"</Typography>
+
+                  <Typography
+                    sx={{
+                      marginTop: "10px",
+                      color: "#707070",
+                      opacity: "0.7",
+                      textAlign: "end",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {comments.date}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+            <CardActions
+              sx={{
+                padding: "16px",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
+                <AddAnswer idComment={comments._id} />
+
+                {comments.replies?.map((answer) => (
+                  <CommentAnswer
+                    key={answer}
+                    id={answer}
+                    idComment={comments._id}
+                  />
+                ))}
+              </Box>
+            </CardActions>
+          </Card>
+        ))}
       </Box>
 
       <Box

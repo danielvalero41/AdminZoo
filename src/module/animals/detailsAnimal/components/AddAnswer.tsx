@@ -3,13 +3,14 @@ import { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { ZooContext } from "../../../../context/ZooContext";
 import { Answer } from "../../../../model/DataZoo";
+import { replyComment } from "../../../../services/commentServices";
 
 type Props = {
-  idComment: number;
+  idComment?: number | string;
 };
 
 export const AddAnswer = ({ idComment }: Props) => {
-  const { idZone, generateId, onAddAnswer, getDateCurrent } =
+  const { idZone, generateId, onAddAnswer, getDateCurrent, setReloadComment } =
     useContext(ZooContext);
   const [isAddAnswer, setIsAddAnswer] = useState(false);
   const [answer, setAnswer] = useState<Answer>(Object({}));
@@ -31,25 +32,42 @@ export const AddAnswer = ({ idComment }: Props) => {
 
   const addAnswerToComment = () => {
     if (!answer.author || !answer.body) return;
-    onAddAnswer(
-      answer?.body!,
-      answer?.author!,
-      getDateCurrent(),
-      idComment,
-      parseInt(id!),
-      idZone,
-      generateId
+
+    replyCommentForEndpoint();
+    // onAddAnswer(
+    //   answer?.body!,
+    //   answer?.author!,
+    //   getDateCurrent(),
+    //   idComment,
+    //   parseInt(id!),
+    //   idZone,
+    //   generateId
+    // );
+    // setIsAddAnswer(false);
+    // setAnswer({
+    //   id: generateId,
+    //   author: "",
+    //   body: "",
+    //   date: "",
+    //   idZone,
+    //   idComment,
+    //   idAnimal: 0,
+    // });
+  };
+
+  const replyCommentForEndpoint = async () => {
+    const data = await replyComment(
+      answer.body,
+      answer.author,
+      idComment as string
     );
-    setIsAddAnswer(false);
-    setAnswer({
-      id: generateId,
-      author: "",
-      body: "",
-      date: "",
-      idZone,
-      idComment,
-      idAnimal: 0,
-    });
+
+    if (data) {
+      setIsAddAnswer(false);
+      setReloadComment(true);
+    }
+
+    console.log(data);
   };
 
   return (

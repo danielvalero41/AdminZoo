@@ -4,11 +4,15 @@ import { Animals, DataZoo } from "../model/DataZoo";
 export type ZooContextProps = {
   reloadAnimals: boolean;
   setReloadAnimals: (value: boolean) => void;
+  reloadComment: boolean;
+  setReloadComment: (value: boolean) => void;
   zoo: DataZoo[];
   setZoo: (value: DataZoo[]) => void;
   positionZone: number;
   idZone: string;
   generateId: string;
+  getIdZone: string;
+  setGetIdZone: (value: string) => void;
   onAddZone: (newZone: string, idZone: string) => void;
   onSelectZone: (value: DataZoo) => void;
   onAddAnimal: (

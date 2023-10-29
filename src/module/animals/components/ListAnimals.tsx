@@ -13,6 +13,7 @@ import { useContext, useState } from "react";
 import { deleteAnimal, updateAnimal } from "../../../services/animalServices";
 import { ZooContext } from "../../../context/ZooContext";
 import CheckIcon from "@mui/icons-material/Check";
+import { useNavigate } from "react-router";
 
 type Props = {
   data: {
@@ -44,6 +45,7 @@ export const ListAnimals = ({
   const { setReloadAnimals } = useContext(ZooContext);
   const [nameAnimal, setNameAnimal] = useState(data.nameAnimal);
   const [species, setSpecies] = useState(data.species);
+  const navigate = useNavigate();
 
   const update = async () => {
     const response = await updateAnimal(data.id, nameAnimal, species, idZone);
@@ -57,6 +59,10 @@ export const ListAnimals = ({
     if (response) {
       setReloadAnimals(true);
     }
+  };
+
+  const viewCommentAnimal = (id: string) => {
+    navigate(`/detalle-animal/${id}`);
   };
 
   return (
@@ -108,7 +114,7 @@ export const ListAnimals = ({
               }}
               variant="contained"
               startIcon={<InsertCommentIcon />}
-              // onClick={getSelectAnimal}
+              onClick={() => viewCommentAnimal(data.id)}
             >
               Ver comentarios
             </Button>

@@ -20,6 +20,7 @@ export const Animals = () => {
     onSelectAnimal,
     getIndexZone,
     getZoneById,
+    setGetIdZone,
     reloadAnimals,
     setReloadAnimals,
   } = useContext(ZooContext);
@@ -59,6 +60,7 @@ export const Animals = () => {
 
   useEffect(() => {
     loadSpecies();
+    setGetIdZone(id!);
   }, []);
 
   useEffect(() => {
