@@ -86,7 +86,7 @@ export const Animals = () => {
         Zona {data.nameZone}
       </Typography>
 
-      <AddAnimal idZone={data.id}></AddAnimal>
+      <AddAnimal idZone={data.id} />
 
       <Box
         sx={{
@@ -104,6 +104,7 @@ export const Animals = () => {
             data={{
               nameAnimal: animal.name,
               species: nameForSpecies(animal.species, arraySpecies),
+              id: animal._id,
             }}
             position={index}
             idZone={animal.zone}
