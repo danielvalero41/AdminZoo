@@ -8,12 +8,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import { DataZoo } from "../../../model/DataZoo";
-import EditIcon from "@mui/icons-material/Edit";
 import { deleteZone, updateZone } from "../../../services/zoneServices";
 import CheckIcon from "@mui/icons-material/Check";
 import { useState } from "react";
+import { EditDelete } from "../../../components/editDelete";
 
 type Props = {
   data: DataZoo;
@@ -56,34 +55,10 @@ export const ListZone = ({ data, viewZone, count, loadZone }: Props) => {
         elevation={2}
       >
         {!edit && (
-          <IconButton
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              "& .MuiSvgIcon-root": {
-                fontSize: "1rem",
-              },
-            }}
-            onClick={getDeleteZone}
-          >
-            <CloseIcon />
-          </IconButton>
-        )}
-        {!edit && (
-          <IconButton
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 20,
-              "& .MuiSvgIcon-root": {
-                fontSize: "1rem",
-              },
-            }}
-            onClick={() => setEdit(true)}
-          >
-            <EditIcon />
-          </IconButton>
+          <EditDelete
+            clickDelete={getDeleteZone}
+            clickEdif={() => setEdit(true)}
+          />
         )}
 
         {!edit && (

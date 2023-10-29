@@ -1,13 +1,27 @@
-import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Animals, DataZoo } from "../../../model/DataZoo";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
+import { EditDelete } from "../../../components/editDelete";
+import { useContext, useState } from "react";
+import { deleteAnimal, updateAnimal } from "../../../services/animalServices";
+import { ZooContext } from "../../../context/ZooContext";
+import CheckIcon from "@mui/icons-material/Check";
 
 type Props = {
   data: {
     nameAnimal: string;
     species: string;
+    id: string;
   };
   position: number;
+  loadAnimals: () => void;
   idZone: string;
   viewAnimal?: (
     value: {
@@ -19,22 +33,47 @@ type Props = {
   ) => void;
 };
 
-export const ListAnimals = ({ data, viewAnimal, position, idZone }: Props) => {
-  const getSelectAnimal = () => {
-    //REVISAR COMENTARIOS
-    // navigate(`/detalle-animal/${value.id}`);
+export const ListAnimals = ({
+  data,
+  viewAnimal,
+  position,
+  idZone,
+  loadAnimals,
+}: Props) => {
+  const [edit, setEdit] = useState(false);
+  const { setReloadAnimals } = useContext(ZooContext);
+  const [nameAnimal, setNameAnimal] = useState(data.nameAnimal);
+  const [species, setSpecies] = useState(data.species);
+
+  const update = async () => {
+    const response = await updateAnimal(data.id, nameAnimal, species, idZone);
+    if (response) {
+      await loadAnimals();
+      setEdit(false);
+    }
+  };
+  const remove = async () => {
+    const response = await deleteAnimal(data.id);
+    if (response) {
+      setReloadAnimals(true);
+    }
   };
 
   return (
     <>
       <Card
         sx={{
-          width: "31%",
+          width: "46%",
           borderRadius: "12px",
+          position: "relative",
+          padding: "20px",
         }}
         elevation={3}
       >
-        <CardContent>
+        {!edit && (
+          <EditDelete clickEdif={() => setEdit(true)} clickDelete={remove} />
+        )}
+        {!edit && (
           <Box
             sx={{
               display: "flex",
@@ -59,14 +98,7 @@ export const ListAnimals = ({ data, viewAnimal, position, idZone }: Props) => {
 
               <Typography sx={{}}>Especie: {data.species}</Typography>
             </Box>
-            <Box
-              sx={
-                {
-                  // display: "flex",
-                  // justifyContent: "center",
-                }
-              }
-            ></Box>
+
             <Button
               size="small"
               sx={{
@@ -76,28 +108,54 @@ export const ListAnimals = ({ data, viewAnimal, position, idZone }: Props) => {
               }}
               variant="contained"
               startIcon={<InsertCommentIcon />}
-              onClick={getSelectAnimal}
+              // onClick={getSelectAnimal}
             >
               Ver comentarios
             </Button>
           </Box>
-        </CardContent>
+        )}
+        {edit && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                marginBottom: "20px",
+                gap: "12px",
+              }}
+            >
+              <TextField
+                defaultValue={data.nameAnimal}
+                label={"Nombre del animal"}
+                onChange={(e) => setNameAnimal(e.target.value)}
+              />
+              <TextField
+                defaultValue={data.species}
+                label={"Nombre de la especie"}
+                onChange={(e) => setSpecies(e.target.value)}
+              />
+            </Box>
+
+            <Button
+              size="small"
+              sx={{
+                color: "#FFF",
+                borderRadius: "18px",
+                p: "8px",
+              }}
+              variant="contained"
+              startIcon={<CheckIcon />}
+              onClick={update}
+            >
+              Guardar
+            </Button>
+          </Box>
+        )}
       </Card>
-      {/* <div className="mt-4">
-        <div className="">
-          <ul className="">
-            <li className="item-zone">
-              <div>
-                <p>Nombre del animal: {data.nameAnimal}</p>
-                <small>Especie: {data.species}</small>
-              </div>
-              <button onClick={getSelectAnimal} className="">
-                Ver comentarios
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div> */}
     </>
   );
 };
